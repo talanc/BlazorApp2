@@ -1,0 +1,23 @@
+﻿<div class="form-group col-md-3">
+    <label>
+        @Title
+        <input class="form-control" value="@Value" @onchange="Changed" type="number" />
+    </label>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public double Value { get; set; }
+
+    [Parameter]
+    public EventCallback<double> ValueChanged { get; set; }
+
+    private Task Changed(ChangeEventArgs e)
+    {
+        Console.WriteLine("NodeEntry.Changed: " + e.Value.ToString());
+        return ValueChanged.InvokeAsync(Convert.ToDouble(e.Value));
+    }
+}

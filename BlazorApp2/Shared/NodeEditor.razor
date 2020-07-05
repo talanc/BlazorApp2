@@ -1,0 +1,51 @@
+﻿<h3>Node Editor</h3>
+
+@foreach (var model in models)
+{
+    var mut = model;
+    <NodeItem @key="model.Id" Value="mut" OnRemove="@RemoveNode" ValueChanged="@UpdateHandler" />
+
+    <hr />
+}
+
+<div style="margin-top: 1rem;">
+    <hr />
+    <button class="btn btn-primary" @onclick="AddNodeTranslate">Add translate</button>
+</div>
+
+@code {
+    private IList<NodeModel> models = new List<NodeModel>();
+    private int nextId = 1;
+
+    private void AddNodeTranslate()
+    {
+        var model = new NodeModelTranslate();
+        model.Id = nextId;
+        models.Add(model);
+
+        nextId++;
+    }
+
+    private void RemoveNode(NodeModel model)
+    {
+        var find = TryGetNodeModel(model);
+        Console.WriteLine(find.ToString());
+        models.Remove(find);
+    }
+
+    private void UpdateHandler(NodeModel model)
+    {
+        Console.WriteLine("UpdateHandler: " + model.ToString());
+
+        var find = TryGetNodeModel(model);
+        if (find != null)
+        {
+            find.SetFrom(model);
+        }
+    }
+
+    private NodeModel TryGetNodeModel(NodeModel model)
+    {
+        return models.FirstOrDefault(curr => curr.Id == model.Id);
+    }
+}

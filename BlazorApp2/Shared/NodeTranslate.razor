@@ -1,0 +1,36 @@
+﻿<form>
+    <div class="form-row">
+        <NodeEntry Title="@nameof(Value.X)" Value="Value.X" ValueChanged="@ValueXChanged" />
+        <NodeEntry Title="@nameof(Value.Y)" Value="Value.Y" ValueChanged="@ValueYChanged" />
+        <NodeEntry Title="@nameof(Value.Z)" Value="Value.Z" ValueChanged="@ValueZChanged" />
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public NodeModelTranslate Value { get; set; }
+
+    [Parameter]
+    public EventCallback<NodeModelTranslate> ValueChanged { get; set; }
+
+    private Task ValueXChanged(double value)
+    {
+        Console.WriteLine($"XChanged: {value}");
+        this.Value.X = value;
+        return ValueChanged.InvokeAsync(this.Value);
+    }
+
+    private Task ValueYChanged(double value)
+    {
+        Console.WriteLine($"YChanged: {value}");
+        this.Value.Y = value;
+        return ValueChanged.InvokeAsync(this.Value);
+    }
+
+    private Task ValueZChanged(double value)
+    {
+        Console.WriteLine($"ZChanged: {value}");
+        this.Value.Z = value;
+        return ValueChanged.InvokeAsync(this.Value);
+    }
+}

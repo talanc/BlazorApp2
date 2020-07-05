@@ -1,0 +1,36 @@
+﻿<div>
+    <p>@Value.Id</p>
+
+    @if (Value is NodeModelTranslate nmt)
+    {
+        <NodeTranslate Value="nmt" ValueChanged="TranslateValueChanged" />
+    }
+    else
+    {
+        <p>Error: Unknown node type: @(Value.GetType().Name)</p>
+    }
+
+    <button class="btn btn-danger" @onclick="OnRemoveClick">Remove</button>
+</div>
+
+@code {
+    [Parameter]
+    public NodeModel Value { get; set; }
+
+    [Parameter]
+    public EventCallback<NodeModel> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<NodeModel> OnRemove { get; set; }
+
+    private Task OnRemoveClick(MouseEventArgs e)
+    {
+        return OnRemove.InvokeAsync(Value);
+    }
+
+    private Task TranslateValueChanged(NodeModelTranslate nmt)
+    {
+        Console.WriteLine($"TranslateValueChanged: {nmt.ToString()}");
+        return ValueChanged.InvokeAsync(nmt);
+    }
+}
