@@ -9,14 +9,14 @@ namespace BlazorApp2
     {
         public int Id { get; set; }
 
-        protected abstract void SetFromInternal(NodeModel other);
+        protected abstract void SetFromProtected(NodeModel other);
 
         public void SetFrom(NodeModel other)
         {
             if (other != null)
             {
                 Id = other.Id;
-                SetFromInternal(other);
+                SetFromProtected(other);
             }
         }
     }
@@ -27,7 +27,7 @@ namespace BlazorApp2
         public double Y { get; set; }
         public double Z { get; set; }
 
-        protected override void SetFromInternal(NodeModel other)
+        protected override void SetFromProtected(NodeModel other)
         {
             if (other is NodeModelTranslate other2)
             {
@@ -39,27 +39,27 @@ namespace BlazorApp2
 
         public override string ToString()
         {
-            return $"X={X},Y={Y},Z={Z}";
+            return $"X={X}, Y={Y}, Z={Z}";
         }
     }
 
     public class NodeModelRotate : NodeModel
     {
         public NodeModelRotateType RotateType { get; set; }
-        public double Value { get; set; }
+        public double Angle { get; set; }
 
-        protected override void SetFromInternal(NodeModel other)
+        protected override void SetFromProtected(NodeModel other)
         {
             if (other is NodeModelRotate other2)
             {
                 RotateType = other2.RotateType;
-                Value = other2.Value;
+                Angle = other2.Angle;
             }
         }
 
         public override string ToString()
         {
-            return $"{RotateType} @ {Value}";
+            return $"Rotate {RotateType} @ {Angle}deg";
         }
     }
 

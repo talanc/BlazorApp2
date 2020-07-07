@@ -1,0 +1,53 @@
+﻿<form>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="@nameRotateAbout">Rotate about</label>
+            <br />
+            @foreach (var opt in new[] { NodeModelRotateType.X, NodeModelRotateType.Y, NodeModelRotateType.Z })
+            {
+        <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input"
+                       name="@nameRotateAbout" type="radio"
+                       checked="@(Value.RotateType == opt)"
+                       @onchange="@(() => RotateTypeChanged(opt))" />
+                @opt.ToString()
+            </label>
+        </div>
+            }
+        </div>
+        <div class="form-group col-md-6">
+            <label for="@nameAngle">Angle (@Value.Angle deg)</label>
+            <input class="form-control-range"
+                   id="@nameAngle" type="range"
+                   min="0" max="360"
+                   value="@Value.Angle"
+                   @onchange="e => AngleChanged(Convert.ToDouble(e.Value))" />
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public NodeModelRotate Value { get; set; }
+
+    [Parameter]
+    public EventCallback<NodeModelRotate> ValueChanged { get; set; }
+
+    private string nameRotateAbout => "rotate-about-" + Value.Id;
+    private string nameAngle => "angle-" + Value.Id;
+
+    private Task RotateTypeChanged(NodeModelRotateType rt)
+    {
+        Console.WriteLine($"RotateTypeChanged: {rt}");
+        Value.RotateType = rt;
+        return ValueChanged.InvokeAsync(Value);
+    }
+
+    private Task AngleChanged(double value)
+    {
+        Console.WriteLine($"AngleChanged: {value}");
+        this.Value.Angle = value;
+        return ValueChanged.InvokeAsync(this.Value);
+    }
+}

@@ -1,16 +1,23 @@
 ﻿<div>
+    <div class="float-right">
+        <button class="btn btn-danger" @onclick="OnRemoveClick">&times;</button>
+    </div>
     <p>@Value.Id</p>
 
     @if (Value is NodeModelTranslate nmt)
     {
         <NodeTranslate Value="nmt" ValueChanged="TranslateValueChanged" />
     }
+    @if (Value is NodeModelRotate nmr)
+    {
+        <NodeRotate Value="nmr" ValueChanged="RotateValueChanged" />
+    }
     else
     {
         <p>Error: Unknown node type: @(Value.GetType().Name)</p>
     }
 
-    <button class="btn btn-danger" @onclick="OnRemoveClick">Remove</button>
+
 </div>
 
 @code {
@@ -32,5 +39,11 @@
     {
         Console.WriteLine($"TranslateValueChanged: {nmt.ToString()}");
         return ValueChanged.InvokeAsync(nmt);
+    }
+
+    private Task RotateValueChanged(NodeModelRotate nmr)
+    {
+        Console.WriteLine($"RotateValueChanged: {nmr.ToString()}");
+        return ValueChanged.InvokeAsync(nmr);
     }
 }

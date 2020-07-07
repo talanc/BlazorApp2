@@ -10,20 +10,25 @@
 
 <div style="margin-top: 1rem;">
     <hr />
-    <button class="btn btn-primary" @onclick="AddNodeTranslate">Add translate</button>
+    <button class="btn btn-primary" @onclick="AppendNodeTranslate">Add translate</button>
+    <button class="btn btn-primary" @onclick="AppendNodeRotate">Add rotate</button>
 </div>
 
 @code {
     private IList<NodeModel> models = new List<NodeModel>();
-    private int nextId = 1;
+    private int nextModelId = 1;
 
-    private void AddNodeTranslate()
+    private void AppendNodeTranslate() => AppendNode<NodeModelTranslate>();
+    private void AppendNodeRotate() => AppendNode<NodeModelRotate>();
+
+    private void AppendNode<TNode>(Action<TNode> configure = default) where TNode : NodeModel, new()
     {
-        var model = new NodeModelTranslate();
-        model.Id = nextId;
+        var model = new TNode();
+        model.Id = nextModelId;
+        configure?.Invoke(model);
         models.Add(model);
 
-        nextId++;
+        nextModelId++;
     }
 
     private void RemoveNode(NodeModel model)
