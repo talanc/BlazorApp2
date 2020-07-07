@@ -8,7 +8,7 @@
     {
         <NodeTranslate Value="nmt" ValueChanged="TranslateValueChanged" />
     }
-    @if (Value is NodeModelRotate nmr)
+    else if  (Value is NodeModelRotate nmr)
     {
         <NodeRotate Value="nmr" ValueChanged="RotateValueChanged" />
     }
