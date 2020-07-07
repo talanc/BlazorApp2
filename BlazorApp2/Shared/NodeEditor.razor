@@ -1,25 +1,31 @@
 ﻿<h3>Node Editor</h3>
 
-@foreach (var model in models)
-{
-    var mut = model;
-    <NodeItem @key="model.Id" Value="mut" OnRemove="@RemoveNode" ValueChanged="@UpdateHandler" />
+<div class="row">
+    <div class="col-md-4">
+        @foreach (var model in models)
+        {
+            var mut = model;
+            <NodeItem @key="model.Id" Value="mut" OnRemove="@RemoveNode" ValueChanged="@UpdateHandler" />
 
-    <hr />
-}
+            <hr />
+        }
+    </div>
+</div>
 
 <div style="margin-top: 1rem;">
     <hr />
-    <button class="btn btn-primary" @onclick="AppendNodeTranslate">Add translate</button>
-    <button class="btn btn-primary" @onclick="AppendNodeRotate">Add rotate</button>
+    <button class="btn btn-primary" @onclick="@(() => AppendNodeTranslate())">Add translate</button>
+    <button class="btn btn-primary" @onclick="@(() => AppendNodeRotate())">Add rotate</button>
 </div>
 
 @code {
     private IList<NodeModel> models = new List<NodeModel>();
     private int nextModelId = 1;
 
-    private void AppendNodeTranslate() => AppendNode<NodeModelTranslate>();
-    private void AppendNodeRotate() => AppendNode<NodeModelRotate>();
+    private void AppendNodeTranslate(Action<NodeModelTranslate> configure = default) =>
+        AppendNode<NodeModelTranslate>(configure);
+    private void AppendNodeRotate(Action<NodeModelRotate> configure = default) =>
+        AppendNode<NodeModelRotate>();
 
     private void AppendNode<TNode>(Action<TNode> configure = default) where TNode : NodeModel, new()
     {
@@ -52,5 +58,20 @@
     private NodeModel TryGetNodeModel(NodeModel model)
     {
         return models.FirstOrDefault(curr => curr.Id == model.Id);
+    }
+
+    protected override void OnInitialized()
+    {
+        AppendNodeTranslate(value =>
+        {
+            value.X = 1;
+            value.Y = 2;
+            value.Z = 3;
+        });
+        AppendNodeRotate(value =>
+        {
+            value.RotateType = NodeModelRotateType.Y;
+            value.Angle = 45;
+        });
     }
 }

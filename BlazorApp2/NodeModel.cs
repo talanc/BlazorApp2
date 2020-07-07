@@ -9,6 +9,8 @@ namespace BlazorApp2
     {
         public int Id { get; set; }
 
+        public abstract string GetHeading();
+
         protected abstract void SetFromProtected(NodeModel other);
 
         public void SetFrom(NodeModel other)
@@ -41,6 +43,11 @@ namespace BlazorApp2
         {
             return $"X={X}, Y={Y}, Z={Z}";
         }
+
+        public override string GetHeading()
+        {
+            return "Translation";
+        }
     }
 
     public class NodeModelRotate : NodeModel
@@ -60,6 +67,11 @@ namespace BlazorApp2
         public override string ToString()
         {
             return $"Rotate {RotateType} @ {Angle}deg";
+        }
+
+        public override string GetHeading()
+        {
+            return "Rotation";
         }
     }
 

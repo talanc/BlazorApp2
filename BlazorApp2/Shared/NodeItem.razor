@@ -1,23 +1,29 @@
-﻿<div>
-    <div class="float-right">
-        <button class="btn btn-danger" @onclick="OnRemoveClick">&times;</button>
+﻿<div class="card">
+    <div class="card-header">
+        @Value.GetHeading()
+        <div class="float-right small text-muted">
+            @Value.Id
+        </div>
     </div>
-    <p>@Value.Id</p>
-
-    @if (Value is NodeModelTranslate nmt)
-    {
-        <NodeTranslate Value="nmt" ValueChanged="TranslateValueChanged" />
-    }
-    else if  (Value is NodeModelRotate nmr)
-    {
-        <NodeRotate Value="nmr" ValueChanged="RotateValueChanged" />
-    }
-    else
-    {
-        <p>Error: Unknown node type: @(Value.GetType().Name)</p>
-    }
-
-
+    <div class="card-body">
+        @if (Value is NodeModelTranslate nmt)
+        {
+            <NodeTranslate Value="nmt" ValueChanged="TranslateValueChanged" />
+        }
+        else if (Value is NodeModelRotate nmr)
+        {
+            <NodeRotate Value="nmr" ValueChanged="RotateValueChanged" />
+        }
+        else
+        {
+            <p>Error: Unknown node type: @(Value.GetType().Name)</p>
+        }
+    </div>
+    <div class="card-footer p-1">
+        <div class="float-right">
+            <button class="btn btn-danger" @onclick="OnRemoveClick">&times;</button>
+        </div>
+    </div>
 </div>
 
 @code {
